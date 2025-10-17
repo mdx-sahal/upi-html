@@ -3,153 +3,46 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>UPI Payment Demo</title>
+    <title>UPI Payment Demo - Test Mode</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        /* Previous CSS remains the same, adding new styles */
+        .test-mode {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
         }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
+        
+        .amount-selector {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
+            gap: 10px;
+            margin: 15px 0;
+            flex-wrap: wrap;
         }
-
-        .container {
-            background: white;
+        
+        .amount-option {
+            padding: 8px 15px;
+            border: 2px solid #e9ecef;
             border-radius: 20px;
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            max-width: 500px;
-            width: 100%;
-        }
-
-        .header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        .header h1 {
-            color: #333;
-            margin-bottom: 10px;
-        }
-
-        .header p {
-            color: #666;
-        }
-
-        .order-summary {
-            background: #f8f9fa;
-            border-radius: 15px;
-            padding: 25px;
-            margin-bottom: 30px;
-        }
-
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 15px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .order-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .total {
-            display: flex;
-            justify-content: space-between;
-            font-size: 1.2em;
-            font-weight: bold;
-            color: #333;
-            margin-top: 15px;
-            padding-top: 15px;
-            border-top: 2px solid #dee2e6;
-        }
-
-        .payment-section {
-            text-align: center;
-        }
-
-        .upi-button {
-            background: linear-gradient(135deg, #25d366 0%, #128c7e 100%);
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            font-size: 1.1em;
-            border-radius: 50px;
             cursor: pointer;
             transition: all 0.3s ease;
-            display: inline-flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 20px;
         }
-
-        .upi-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(37, 211, 102, 0.3);
+        
+        .amount-option.selected {
+            border-color: #007bff;
+            background: #007bff;
+            color: white;
         }
-
-        .payment-status {
-            margin-top: 20px;
-            padding: 15px;
+        
+        .debug-info {
+            background: #f8f9fa;
             border-radius: 10px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 0.8em;
             display: none;
-        }
-
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-            border: 1px solid #ffeaa7;
-        }
-
-        .status-success {
-            background: #d1edff;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-        }
-
-        .status-failed {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-        }
-
-        .loading {
-            display: inline-block;
-            width: 20px;
-            height: 20px;
-            border: 3px solid #ffffff;
-            border-radius: 50%;
-            border-top-color: transparent;
-            animation: spin 1s ease-in-out infinite;
-        }
-
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-
-        .sms-consent {
-            background: #e7f3ff;
-            padding: 15px;
-            border-radius: 10px;
-            margin-top: 20px;
-            font-size: 0.9em;
-            color: #555;
-        }
-
-        .consent-checkbox {
-            margin-right: 8px;
         }
     </style>
 </head>
@@ -157,86 +50,143 @@
     <div class="container">
         <div class="header">
             <h1>🛍️ Demo Store</h1>
-            <p>Secure UPI Payment</p>
+            <p>UPI Payment Test Mode</p>
+        </div>
+
+        <div class="test-mode">
+            <strong>Test Mode Active</strong>
+            <p>Using test UPI IDs to avoid bank limits</p>
         </div>
 
         <div class="order-summary">
             <h3>Order Summary</h3>
             <div class="order-item">
                 <span>Demo Product</span>
-                <span>₹1.00</span>
-            </div>
-            <div class="order-item">
-                <span>Tax</span>
-                <span>₹0.00</span>
-            </div>
-            <div class="order-item">
-                <span>Shipping</span>
-                <span>Free</span>
+                <span id="displayAmount">₹1.00</span>
             </div>
             <div class="total">
                 <span>Total Amount</span>
-                <span>₹1.00</span>
+                <span id="totalAmount">₹1.00</span>
+            </div>
+            
+            <div class="amount-selector">
+                <div class="amount-option selected" data-amount="1.00">₹1</div>
+                <div class="amount-option" data-amount="2.00">₹2</div>
+                <div class="amount-option" data-amount="5.00">₹5</div>
+                <div class="amount-option" data-amount="10.00">₹10</div>
             </div>
         </div>
 
         <div class="payment-section">
             <button class="upi-button" onclick="initiateUPIPayment()">
                 <span>💳</span>
-                Pay via UPI
+                Test UPI Payment
             </button>
             
-            <div class="sms-consent">
-                <label>
-                    <input type="checkbox" id="smsConsent" class="consent-checkbox">
-                    Enable automatic payment confirmation via SMS (requires SMS permission)
-                </label>
-            </div>
-
-            <div id="paymentStatus" class="payment-status"></div>
+            <div class="payment-status" id="paymentStatus"></div>
+            
+            <button onclick="toggleDebug()" style="margin-top: 10px; background: #6c757d; color: white; border: none; padding: 8px 15px; border-radius: 5px; cursor: pointer;">
+                Debug Info
+            </button>
+            
+            <div class="debug-info" id="debugInfo"></div>
         </div>
     </div>
 
     <script>
-        // Generate a unique transaction ID
+        let currentAmount = '1.00';
+        let currentTransactionId = '';
+
+        // Test UPI configurations
+        const testConfigs = [
+            { pa: 'success@razorpay', pn: 'Razorpay Test', type: 'always_success' },
+            { pa: 'failure@razorpay', pn: 'Razorpay Test', type: 'always_failure' },
+            { pa: 'test@ybl', pn: 'PhonePe Test', type: 'random' },
+            { pa: 'test@okicici', pn: 'GPay Test', type: 'random' }
+        ];
+
+        // Amount selection
+        document.querySelectorAll('.amount-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.amount-option').forEach(opt => {
+                    opt.classList.remove('selected');
+                });
+                this.classList.add('selected');
+                
+                currentAmount = this.getAttribute('data-amount');
+                document.getElementById('displayAmount').textContent = `₹${currentAmount}`;
+                document.getElementById('totalAmount').textContent = `₹${currentAmount}`;
+            });
+        });
+
         function generateTransactionId() {
-            return 'TXN' + Date.now() + Math.random().toString(36).substr(2, 9).toUpperCase();
+            return 'TXN' + Date.now() + Math.random().toString(36).substr(2, 6).toUpperCase();
         }
 
-        // UPI deep-link parameters
-        const upiParams = {
-            pa: 'sahalhii5581@oksbi', // Payment address (Virtual Payment Address)
-            pn: 'Mythorr', // Payee name
-            am: '1.00',       // Amount
-            cu: 'INR',        // Currency
-            tn: generateTransactionId() // Transaction note
-        };
+        function getRandomTestConfig() {
+            return testConfigs[Math.floor(Math.random() * testConfigs.length)];
+        }
 
         function initiateUPIPayment() {
-            const transactionId = upiParams.tn;
+            currentTransactionId = generateTransactionId();
+            const config = getRandomTestConfig();
             
             // Show pending status
             showPaymentStatus('pending', 'Opening UPI app...');
-
-            // Construct UPI deep-link
-            const upiLink = `upi://pay?pa=${upiParams.pa}&pn=${encodeURIComponent(upiParams.pn)}&am=${upiParams.am}&cu=${upiParams.cu}&tn=${encodeURIComponent(transactionId)}`;
             
-            // Store transaction ID for verification
-            localStorage.setItem('currentTransaction', transactionId);
+            // Construct UPI deep-link
+            const upiLink = `upi://pay?pa=${config.pa}&pn=${encodeURIComponent(config.pn)}&am=${currentAmount}&cu=INR&tn=${encodeURIComponent(currentTransactionId)}`;
+            
+            // Store transaction info
+            localStorage.setItem('currentTransaction', currentTransactionId);
             localStorage.setItem('transactionTime', Date.now().toString());
+            localStorage.setItem('transactionAmount', currentAmount);
+            localStorage.setItem('upiConfig', JSON.stringify(config));
+
+            // Show debug info
+            updateDebugInfo(upiLink, config);
 
             // Open UPI app
+            console.log('Opening UPI link:', upiLink);
             window.location.href = upiLink;
 
             // Start payment verification
             setTimeout(() => {
-                checkPaymentStatus(transactionId);
+                simulatePaymentVerification(currentTransactionId, config);
             }, 3000);
+        }
 
-            // If SMS consent is given, start SMS monitoring
-            if (document.getElementById('smsConsent').checked) {
-                startSMSMonitoring(transactionId);
-            }
+        function simulatePaymentVerification(transactionId, config) {
+            showPaymentStatus('pending', 'Verifying payment...');
+
+            // Simulate different outcomes based on test config
+            setTimeout(() => {
+                let status, message;
+                
+                switch(config.type) {
+                    case 'always_success':
+                        status = 'success';
+                        message = `Payment successful! ₹${currentAmount} received.`;
+                        break;
+                    case 'always_failure':
+                        status = 'failed';
+                        message = 'Payment failed. Please try again.';
+                        break;
+                    case 'random':
+                    default:
+                        status = Math.random() > 0.3 ? 'success' : 'failed';
+                        message = status === 'success' 
+                            ? `Payment successful! ₹${currentAmount} received.` 
+                            : 'Payment failed or was cancelled.';
+                        break;
+                }
+                
+                showPaymentStatus(status, message);
+                
+                // Update debug info with result
+                updateDebugInfo(null, config, { status, message });
+                
+            }, 2000);
         }
 
         function showPaymentStatus(status, message) {
@@ -260,61 +210,49 @@
             }
         }
 
-        function checkPaymentStatus(transactionId) {
-            // Simulate checking payment status
-            // In real implementation, this would check your backend
-            showPaymentStatus('pending', 'Verifying payment...');
-
-            // Simulate API call to check payment
-            setTimeout(() => {
-                // For demo purposes, we'll simulate random success/failure
-                const isSuccess = Math.random() > 0.3; // 70% success rate for demo
-                
-                if (isSuccess) {
-                    showPaymentStatus('success', 'Payment successful! Transaction ID: ' + transactionId);
-                } else {
-                    showPaymentStatus('failed', 'Payment failed or pending. Please try again.');
-                }
-            }, 5000);
+        function toggleDebug() {
+            const debugInfo = document.getElementById('debugInfo');
+            debugInfo.style.display = debugInfo.style.display === 'none' ? 'block' : 'none';
         }
 
-        // SMS Monitoring Functionality
-        function startSMSMonitoring(transactionId) {
-            if (typeof SMS !== 'undefined' && SMS) {
-                // For Cordova/PhoneGap apps with SMS plugin
-                SMS.startWatch(() => {
-                    console.log('SMS monitoring started');
-                }, (error) => {
-                    console.log('SMS monitoring failed:', error);
-                });
-            } else {
-                console.log('SMS monitoring not available in browser');
-                // Fallback to manual verification
-                manualSMSVerification(transactionId);
-            }
-        }
-
-        function manualSMSVerification(transactionId) {
-            showPaymentStatus('pending', 'Waiting for payment confirmation...');
+        function updateDebugInfo(upiLink = null, config = null, result = null) {
+            const debugInfo = document.getElementById('debugInfo');
+            let content = '';
             
-            // In a real implementation, this would be handled by:
-            // 1. Backend webhook from payment gateway
-            // 2. Mobile app with SMS reading permissions
-            // 3. User manually confirming payment
+            if (upiLink && config) {
+                content = `
+                    <strong>Current Transaction:</strong><br>
+                    ID: ${currentTransactionId}<br>
+                    Amount: ₹${currentAmount}<br>
+                    UPI ID: ${config.pa}<br>
+                    Type: ${config.type}<br>
+                    Deep Link: <span style="word-break: break-all;">${upiLink}</span>
+                `;
+            }
+            
+            if (result) {
+                content += `<br><br><strong>Result:</strong> ${result.status} - ${result.message}`;
+            }
+            
+            debugInfo.innerHTML = content;
         }
 
-        // Fallback: Check if user returned from UPI app
+        // Handle app return
         window.addEventListener('focus', () => {
-            const currentTransaction = localStorage.getItem('currentTransaction');
+            const storedTransaction = localStorage.getItem('currentTransaction');
             const transactionTime = localStorage.getItem('transactionTime');
             
-            if (currentTransaction && transactionTime) {
+            if (storedTransaction && transactionTime) {
                 const timeDiff = Date.now() - parseInt(transactionTime);
-                if (timeDiff > 5000) { // User was away for more than 5 seconds
-                    checkPaymentStatus(currentTransaction);
+                if (timeDiff > 3000) {
+                    const config = JSON.parse(localStorage.getItem('upiConfig') || '{}');
+                    simulatePaymentVerification(storedTransaction, config);
                 }
             }
         });
+
+        // Initialize debug info
+        updateDebugInfo();
     </script>
 </body>
 </html>
