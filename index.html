@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>UPI Payment Demo</title>
+  <title>UPI Payment Demo — Mythological Tools</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -11,22 +11,39 @@
     }
     .card {
       display: inline-block;
-      padding: 20px;
+      padding: 25px;
       background: white;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 12px;
+      box-shadow: 0 3px 10px rgba(0,0,0,0.1);
     }
     button {
       background-color: #007bff;
       color: white;
       border: none;
-      padding: 10px 20px;
+      padding: 12px 25px;
       margin-top: 20px;
-      border-radius: 5px;
+      border-radius: 6px;
       cursor: pointer;
+      font-size: 16px;
     }
     button:hover {
       background-color: #0056b3;
+    }
+    input {
+      width: 60px;
+      padding: 5px;
+      text-align: center;
+      font-size: 16px;
+    }
+    #status {
+      margin-top: 25px;
+      font-weight: bold;
+      color: green;
+    }
+    .note {
+      margin-top: 15px;
+      font-size: 12px;
+      color: #555;
     }
   </style>
 </head>
@@ -35,15 +52,37 @@
   <div class="card">
     <h2>Mythological Tools — Demo Order</h2>
     <p><b>Order:</b> Ancient Tool Access</p>
-    <p><b>Amount:</b> ₹10</p>
-    <button onclick="payUPI()">Pay via UPI</button>
-    <p id="status" style="margin-top: 20px;"></p>
+    <p><b>Amount:</b> ₹<span id="amount-display">1</span></p>
+    
+    <button onclick="payUPI()">Pay via UPI (₹1)</button>
+    <br>
+    <button onclick="confirmPayment()">Payment Done (Simulated)</button>
+    
+    <p id="status"></p>
+    <p class="note">
+      Note: Some UPI apps may block ₹1 as a minimum limit. The “Payment Done” button simulates confirmation for demo purposes.
+    </p>
   </div>
 
   <script>
+    const UPI_ID = "yourupiid@bank"; // Replace with your UPI ID
+    const MERCHANT_NAME = "MythologyTools";
+    const AMOUNT = "1.00"; // INR 1
+    const TXN_NOTE = "ORDER12345";
+
     function payUPI() {
-      const upiLink = "upi://pay?pa=sahalhii5581@oksbi&pn=MythologyTools&am=10.00&cu=INR&tn=OrderTest123";
+      const upiLink = `upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${AMOUNT}&cu=INR&tn=${TXN_NOTE}`;
+      
+      // Open UPI app if on mobile
       window.location.href = upiLink;
+
+      // Also log for demo
+      console.log("UPI Link Generated:", upiLink);
+      alert("UPI link generated:\n" + upiLink + "\n(This triggers actual UPI if supported)");
+    }
+
+    function confirmPayment() {
+      document.getElementById('status').innerText = "✅ Payment Received (Simulated)";
     }
   </script>
 
