@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>UPI Payment Demo</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 100px;
+      background: #f8f8f8;
+    }
+    .card {
+      display: inline-block;
+      padding: 20px;
+      background: white;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    button {
+      background-color: #007bff;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 20px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <h2>Mythological Tools — Demo Order</h2>
+    <p><b>Order:</b> Ancient Tool Access</p>
+    <p><b>Amount:</b> ₹1</p>
+    <button onclick="payUPI()">Pay via UPI</button>
+    <p id="status" style="margin-top: 20px;"></p>
+  </div>
+
+  <script>
+    function payUPI() {
+      const upiLink = "upi://pay?pa=sahalhii5581@oksbi&pn=MythologyTools&am=1.00&cu=INR&tn=OrderTest123";
+      window.location.href = upiLink;
+    }
+  </script>
+
+</body>
+</html>
