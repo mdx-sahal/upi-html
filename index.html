@@ -65,18 +65,14 @@
   </div>
 
   <script>
-    const UPI_ID = "yourupiid@bank"; // Replace with your UPI ID
+    const UPI_ID = "sahalhii5581@oksbi"; 
     const MERCHANT_NAME = "MythologyTools";
-    const AMOUNT = "1.00"; // INR 1
+    const AMOUNT = "1.00"; // 
     const TXN_NOTE = "ORDER12345";
 
     function payUPI() {
       const upiLink = `upi://pay?pa=${UPI_ID}&pn=${MERCHANT_NAME}&am=${AMOUNT}&cu=INR&tn=${TXN_NOTE}`;
-      
-      // Open UPI app if on mobile
       window.location.href = upiLink;
-
-      // Also log for demo
       console.log("UPI Link Generated:", upiLink);
       alert("UPI link generated:\n" + upiLink + "\n(This triggers actual UPI if supported)");
     }
